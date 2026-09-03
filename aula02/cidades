@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cidades</title>
+
+    <style>
+        h1 {
+            color: palevioletred;
+            font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+            text-align: center;
+            font-style: oblique;
+        }
+
+        .container{
+            background-color: pink;
+            color: brown;
+            text-align: justify;
+            border-radius: 25px;
+            width: 600px;
+            height: 400px;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+        }
+
+        .container2{
+            background-color: palegoldenrod;
+            color: green;
+            width: 600px;
+            height: 150px;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            display: block;
+            border-radius: 25px;
+            align-content: center;
+            text-align: center;
+        }
+        .btn{
+            background-color: blue;
+            color: white;
+            text-align: center;
+        }
+
+        button:hover {
+             background-color: darkblue;
+        }   
+    </style>
+</head>
+<body>
+    <h1>Minha opinião sobre algumas cidades</h1>
+    <div class="container">
+        <h2> > Cidades que EU amooo 🩷​🧡​💛​</h2>
+        <ol>
+         <li><a href="https://pt.wikipedia.org/wiki/Erer%C3%A9#/media/Ficheiro:Pra%C3%A7a_da_Matriz_e_Igreja_Bom_Jesus_da_Agonia,_Erer%C3%A9_(CE).jpg" target='_blank'>Ereré </a> (minha favorita)</li>
+         <li>Brasília</li>
+         <li>Serra da Saudade</li>
+        </ol>
+
+        <a href="https://www.erere.ce.gov.br/omunicipio.php" target='_blank'> <img src="erere.jpg" style="max-width: 200px; max-height: 200px;"> </a>
+        
+    </div>
+    
+   <div class="container2">
+    <h2>Cidades que odeio!!!!! 👺​</h2>
+    <ul>
+     <li>Paracatu</li>
+     <li>Uberlândia</li>
+     <li>3 Ranchos</li>
+    </ul>
+   </div>
+
+   <div>
+    <h2>Aqui a minha tabela do amor</h2>
+    <table border="1">
+        <thead>
+            <tr>
+                <td>ID</td>
+                <td>Nome</td>
+                <td>Valor</td>
+                <td>Quantidade</td>
+                <td>Total</td>
+              </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>1</td>
+            <td>Sopa em pó</td>
+            <td>R$ 25,00</td>
+            <td>2</td>
+            <td>R$ 50,00</td>
+          </tr>
+          <tr>
+            <td>2</td>
+            <td>Saxixa</td>
+            <td>R$ 2,00</td>
+            <td>2</td>
+            <td>R$ 4,00</td>
+          </tr>
+          <tr>
+            <td>3</td>
+            <td>Sabão em pó</td>
+            <td>R$ 25,00</td>
+            <td>3</td>
+            <td>R$ 75,00</td>
+          </tr>
+          <tr>
+            <td>4</td>
+            <td>Ameixa</td>
+            <td>R$ 1,00</td>
+            <td>9</td>
+            <td>R$ 9,00</td>
+          </tr>
+          <tr>
+            <td>5</td>
+            <td>Binoculos</td>
+            <td>R$ 125,00</td>
+            <td>1</td>
+            <td>R$ 125,00</td>
+          </tr>
+        </tbody>
+      </table>
+   </div>
+
+   <div>
+    <h2>Formulário</h2>
+    <label for="nome">Nome: </label>
+    <input type="text" name="nome" required> 
+    <br>
+    <label for="produto">Qual produto voce quer comprar?</label> <br>
+    <input type="checkbox"> Sopa em pó <br>
+    <input type="checkbox" name="a" id="1"> Sabão em pó
+    <br>
+    <button class="btn">Enviar</button>
+   </div>
+   
+</body>
+</html>
