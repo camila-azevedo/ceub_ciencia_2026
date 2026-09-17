@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulário</title>
+</head>
+<body>
+    <h1>ESCOLA VIRTUAL</h1>
+    <h2>Formulário de Pré-Matrícula</h2>
+<fieldset>
+    <h2><strong>Dados Pessoais</strong></h2>
+    <label for="nome">Nome:</label>
+    <input type="text">
+   
+    <label for="dtNascimento">Data de nascimento: </label>
+    <input type="date">
+  
+    <label for="nomeMae">Nome da Mãe:</label>
+    <input type="text">
+
+    <label for="nomePai">Nome do Pai:</label>
+    <input type="text">
+ 
+    <label for="telefone">Telefone</label>
+    DDD:  <input type="text">
+    TEL: <input type="text">
+    Ramal <input type="text">
+
+    <label for="">e-mail</label>
+    <input type="text">
+</fieldset>
+<fieldset>
+    <h2><strong>Informaçõe de Matrícula</strong></h2>
+    <label for="serie">Série</label>
+    <select id="serie" name="serie">
+        <option value="f4">pré-escola</option>
+        <option value="f3" selected>Fundamental 1</option>
+        <option value="f2">Fundamental 2</option>
+        <option value="em">Ensino Médio</option>
+      </select>
+
+    <label for="turno">Turno</label>
+ 
+    <input type="radio"> Matutino
+    <input type="radio"> Vespertino
+
+
+    <label for="atividades">Atividades Extracurriculares</label>
+
+    <input type="checkbox"> Informatica
+    <input type="checkbox"> Musica
+    <input type="checkbox"> Ballet
+    <input type="checkbox"> Pintura
+    <input type="checkbox"> Judô
+</fieldset>
+
+<button>Enviar</button>
+<button>Limpar campos</button>
+    
+    
+</body>
+</html>
