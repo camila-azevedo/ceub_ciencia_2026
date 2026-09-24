@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BuscaPet CEUB - Sistema Integrado</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Google Fonts Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        ceub: {
+                            purple: '#43054e',
+                            lilas: '#662c92',
+                            magenta: '#ec0089',
+                            yellow: '#fde100',
+                            dark: '#24022b',
+                            lightBg: '#f8f5fa'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .gradient-ceub {
+            background: linear-gradient(135deg, #43054e 0%, #662c92 60%, #ec0089 100%);
+        }
+        .bg-ceub-sidebar {
+            background: linear-gradient(180deg, #43054e 0%, #2f0338 100%);
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #662c92;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body class="bg-ceub-lightBg text-gray-800 font-sans min-h-screen flex flex-col md:flex-row antialiased overflow-x-hidden">
+
+    <!-- Sidebar / Menu Lateral Fixa -->
+    <aside id="sidebar" class="w-full md:w-64 bg-ceub-sidebar text-white flex-shrink-0 flex flex-col justify-between hidden md:flex min-h-screen shadow-2xl transition-all duration-300 z-30 sticky top-0 h-screen">
+        <div>
+            <!-- LOGO / MARCA CEUB - Clique redireciona para a Tela Inicial -->
+            <div class="p-5 border-b border-white/10 flex items-center justify-between">
+                <a href="#home" onclick="navigateTo('home'); return false;" class="flex items-center space-x-3 group cursor-pointer" title="Voltar para a Tela Inicial">
+                    <div class="w-10 h-10 rounded-xl bg-ceub-yellow text-ceub-purple flex items-center justify-center font-extrabold text-xl shadow-lg transform group-hover:scale-105 transition-all duration-200">
+                        <i data-lucide="dog" class="w-6 h-6 stroke-[2.5]"></i>
+                    </div>
+                    <div>
+                        <span class="text-xl font-bold tracking-tight text-white group-hover:text-ceub-yellow transition-colors block leading-tight">BuscaPet</span>
+                        <span class="text-xs font-semibold text-ceub-yellow uppercase tracking-widest block">CEUB Campus</span>
+                    </div>
+                </a>
+            </div>
+
+            <!-- Menu de Navegação -->
+            <nav class="p-4 space-y-1.5" id="sidebar-menu">
+                <a href="#home" onclick="navigateTo('home'); return false;" id="nav-home" class="nav-item flex items-center space-x-3 px-4 py-3 rounded-xl font-medium text-sm transition-all duration-200 bg-ceub-magenta text-white shadow-md">
+                    <i data-lucide="home" class="w-5 h-5"></i>
+                    <span>Tela Inicial</span>
+                </a>
+
+                <a href="#pets-perdidos" onclick="navigateTo('pets-perdidos'); return false;" id="nav-pets-perdidos" class="nav-item flex items-center space-x-3 px-4 py-3 rounded-xl font-medium text-sm text-gray-200 hover:bg-white/10 hover:text-white transition-all duration-200">
+                    <i data-lucide="list" class="w-5 h-5"></i>
+                    <span>Pets Perdidos (Tabela)</span>
+                    <span class="ml-auto bg-ceub-yellow text-ceub-purple text-xs font-bold px-2 py-0.5 rounded-full" id="total-badge">4</span>
+                </a>
+
+                <a href="#cadastrar" onclick="navigateTo('cadastrar'); return false;" id="nav-cadastrar" class="nav-item flex items-center space-x-3 px-4 py-3 rounded-xl font-medium text-sm text-gray-200 hover:bg-white/10 hover:text-white transition-all duration-200">
+                    <i data-lucide="plus-circle" class="w-5 h-5"></i>
+                    <span>Cadastrar Pet Perdido</span>
+                </a>
+
+                <a href="#mapa" onclick="navigateTo('mapa'); return false;" id="nav-mapa" class="nav-item flex items-center space-x-3 px-4 py-3 rounded-xl font-medium text-sm text-gray-200 hover:bg-white/10 hover:text-white transition-all duration-200">
+                    <i data-lucide="map-pin" class="w-5 h-5"></i>
+                    <span>Mapa do Campus</span>
+                </a>
+
+                <a href="#ajuda" onclick="navigateTo('ajuda'); return false;" id="nav-ajuda" class="nav-item flex items-center space-x-3 px-4 py-3 rounded-xl font-medium text-sm text-gray-200 hover:bg-white/10 hover:text-white transition-all duration-200">
+                    <i data-lucide="help-circle" class="w-5 h-5"></i>
+                    <span>Ajuda & Dúvidas</span>
+                </a>
+            </nav>
+        </div>
+
+        <!-- Perfil/Ação do Usuário no rodapé da Sidebar -->
+        <div class="p-4 border-t border-white/10 bg-black/10">
+            <div class="flex items-center space-x-3">
+                <div class="w-9 h-9 rounded-full bg-ceub-lilas text-white flex items-center justify-center font-bold text-sm border border-ceub-yellow">
+                    AC
+                </div>
+                <div class="flex-1 min-w-0">
+                    <p class="text-xs font-semibold text-white truncate">Aluno CEUB</p>
+                    <p class="text-[10px] text-gray-300 truncate">aluno@ceub.edu.br</p>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Content Wrapper -->
+    <div class="flex-1 flex flex-col min-w-0 min-h-screen">
+
+        <!-- Header Mobile com Logo Clicável -->
+        <header class="bg-ceub-purple text-white p-4 flex items-center justify-between md:hidden shadow-lg sticky top-0 z-40">
+            <a href="#home" onclick="navigateTo('home'); return false;" class="flex items-center space-x-2">
+                <div class="w-8 h-8 rounded-lg bg-ceub-yellow text-ceub-purple flex items-center justify-center font-bold">
+                    <i data-lucide="dog" class="w-5 h-5"></i>
+                </div>
+                <span class="font-bold text-lg tracking-tight text-white">BuscaPet CEUB</span>
+            </a>
+            <button id="mobile-menu-btn" onclick="toggleMobileMenu()" class="p-2 text-white hover:bg-ceub-lilas rounded-lg transition-colors">
+                <i data-lucide="menu" class="w-6 h-6"></i>
+            </button>
+        </header>
+
+        <!-- Menu Mobile Dropdown -->
+        <div id="mobile-menu" class="hidden md:hidden bg-ceub-sidebar text-white p-4 border-b border-white/10 space-y-2 sticky top-[60px] z-30">
+            <a href="#home" onclick="navigateTo('home'); toggleMobileMenu(); return false;" class="block py-2.5 px-4 rounded-lg bg-ceub-magenta font-medium">Tela Inicial</a>
+            <a href="#pets-perdidos" onclick="navigateTo('pets-perdidos'); toggleMobileMenu(); return false;" class="block py-2.5 px-4 rounded-lg hover:bg-white/10 font-medium">Pets Perdidos (Tabela)</a>
+            <a href="#cadastrar" onclick="navigateTo('cadastrar'); toggleMobileMenu(); return false;" class="block py-2.5 px-4 rounded-lg hover:bg-white/10 font-medium">Cadastrar Pet</a>
+            <a href="#mapa" onclick="navigateTo('mapa'); toggleMobileMenu(); return false;" class="block py-2.5 px-4 rounded-lg hover:bg-white/10 font-medium">Mapa do Campus</a>
+            <a href="#ajuda" onclick="navigateTo('ajuda'); toggleMobileMenu(); return false;" class="block py-2.5 px-4 rounded-lg hover:bg-white/10 font-medium">Ajuda</a>
+        </div>
+
+        <!-- Main Content Area -->
+        <main class="flex-1 p-4 md:p-8 max-w-7xl w-full mx-auto">
+
+            <!-- ================= VIEW 1: TELA INICIAL (HOME) ================= -->
+            <section id="view-home" class="view-section space-y-8 animate-fadeIn">
+                <!-- Hero Banner CEUB -->
+                <div class="relative overflow-hidden rounded-3xl gradient-ceub text-white p-6 md:p-10 shadow-xl">
+                    <div class="absolute -right-10 -bottom-10 opacity-10 pointer-events-none">
+                        <i data-lucide="dog" class="w-96 h-96"></i>
+                    </div>
+                    <div class="relative z-10 max-w-2xl space-y-4">
+                        <span class="inline-block bg-ceub-yellow text-ceub-purple text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">
+                            Rede de Apoio Animal CEUB
+                        </span>
+                        <h1 class="text-3xl md:text-5xl font-extrabold tracking-tight leading-tight">
+                            Encontre e ajude pets perdidos no Campus CEUB
+                        </h1>
+                        <p class="text-purple-100 text-sm md:text-base leading-relaxed">
+                            Conectamos alunos, professores e colaboradores para reunir animais avistados no campus com seus tutores ou locais seguros.
+                        </p>
+                        <div class="flex flex-wrap gap-3 pt-2">
+                            <button onclick="navigateTo('pets-perdidos')" class="px-6 py-3 rounded-xl bg-ceub-yellow text-ceub-purple font-bold hover:bg-yellow-300 transition-all shadow-lg flex items-center space-x-2">
+                                <i data-lucide="search" class="w-5 h-5"></i>
+                                <span>Ver Pets Registrados</span>
+                            </button>
+                            <button onclick="navigateTo('cadastrar')" class="px-6 py-3 rounded-xl bg-white/20 hover:bg-white/30 text-white font-semibold backdrop-blur-sm transition-all flex items-center space-x-2">
+                                <i data-lucide="plus-circle" class="w-5 h-5"></i>
+                                <span>Cadastrar Pet Avistado</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Métricas / Dashboard Quick Stats -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <div class="bg-white p-5 rounded-2xl shadow-sm border border-purple-100 flex items-center justify-between">
+                        <div>
+                            <p class="text-xs text-gray-500 font-medium">Pets Perdidos</p>
+                            <h3 class="text-2xl font-bold text-ceub-purple" id="stat-perdidos">3</h3>
+                        </div>
+                        <div class="w-12 h-12 bg-purple-50 text-ceub-purple rounded-xl flex items-center justify-center">
+                            <i data-lucide="alert-circle" class="w-6 h-6"></i>
+                        </div>
+                    </div>
+
+                    <div class="bg-white p-5 rounded-2xl shadow-sm border border-purple-100 flex items-center justify-between">
+                        <div>
+                            <p class="text-xs text-gray-500 font-medium">Encontrados / Reunidos</p>
+                            <h3 class="text-2xl font-bold text-emerald-600">12</h3>
+                        </div>
+                        <div class="w-12 h-12 bg-emerald-50 text-emerald-600 rounded-xl flex items-center justify-center">
+                            <i data-lucide="check-circle-2" class="w-6 h-6"></i>
+                        </div>
+                    </div>
+
+                    <div class="bg-white p-5 rounded-2xl shadow-sm border border-purple-100 flex items-center justify-between">
+                        <div>
+                            <p class="text-xs text-gray-500 font-medium">Pontos de Alimento</p>
+                            <h3 class="text-2xl font-bold text-ceub-lilas">6</h3>
+                        </div>
+                        <div class="w-12 h-12 bg-ceub-lightBg text-ceub-lilas rounded-xl flex items-center justify-center">
+                            <i data-lucide="utensils" class="w-6 h-6"></i>
+                        </div>
+                    </div>
+
+                    <div class="bg-white p-5 rounded-2xl shadow-sm border border-purple-100 flex items-center justify-between">
+                        <div>
+                            <p class="text-xs text-gray-500 font-medium">Voluntários Ativos</p>
+                            <h3 class="text-2xl font-bold text-ceub-magenta">48</h3>
+                        </div>
+                        <div class="w-12 h-12 bg-pink-50 text-ceub-magenta rounded-xl flex items-center justify-center">
+                            <i data-lucide="heart" class="w-6 h-6"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Últimos Alertas em Destaque -->
+                <div class="space-y-4">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <h2 class="text-xl font-bold text-ceub-purple">Últimos Pets Registrados</h2>
+                            <p class="text-xs text-gray-500">Mantenha os olhos abertos no campus do CEUB</p>
+                        </div>
+                        <button onclick="navigateTo('pets-perdidos')" class="text-xs font-bold text-ceub-magenta hover:text-ceub-purple flex items-center space-x-1">
+                            <span>Ver todos na Tabela</span>
+                            <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                        </button>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="home-cards-container">
+                        <!-- Cards injetados via JS -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- ================= VIEW 2: TABELA DE PETS PERDIDOS ================= -->
+            <section id="view-pets-perdidos" class="view-section hidden space-y-6">
+                <!-- Topbar da Tabela com Botão de Voltar -->
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-6 rounded-2xl shadow-sm border border-purple-100">
+                    <div class="flex items-center space-x-3">
+                        <button onclick="navigateTo('home')" class="p-2 rounded-xl bg-gray-100 text-gray-600 hover:bg-ceub-purple hover:text-white transition-colors" title="Voltar para a Tela Inicial">
+                            <i data-lucide="arrow-left" class="w-5 h-5"></i>
+                        </button>
+                        <div>
+                            <h1 class="text-2xl font-bold text-ceub-purple">Tabela de Pets Perdidos</h1>
+                            <p class="text-xs text-gray-500">Lista geral de ocorrências cadastradas na comunidade CEUB</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                        <button onclick="navigateTo('cadastrar')" class="px-4 py-2.5 bg-ceub-magenta text-white font-semibold rounded-xl text-sm hover:bg-ceub-purple transition-colors flex items-center space-x-2 shadow-md">
+                            <i data-lucide="plus" class="w-4 h-4"></i>
+                            <span>Novo Cadastro</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Filtros & Busca -->
+                <div class="bg-white p-4 rounded-2xl shadow-sm border border-purple-100 flex flex-wrap gap-3">
+                    <div class="flex-1 min-w-[200px] relative">
+                        <i data-lucide="search" class="w-4 h-4 absolute left-3 top-3 text-gray-400"></i>
+                        <input type="text" id="search-input" onkeyup="filterPets()" placeholder="Buscar por nome, raça ou local..." class="w-full pl-9 pr-4 py-2 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-ceub-lilas">
+                    </div>
+                    <select id="species-filter" onchange="filterPets()" class="px-3 py-2 bg-gray-50 border border-gray-200 rounded-xl text-sm text-gray-700 focus:outline-none focus:border-ceub-lilas">
+                        <option value="">Todas as Espécies</option>
+                        <option value="Cachorro">Cachorro</option>
+                        <option value="Gato">Gato</option>
+                        <option value="Outro">Outro</option>
+                    </select>
+                    <select id="status-filter" onchange="filterPets()" class="px-3 py-2 bg-gray-50 border border-gray-200 rounded-xl text-sm text-gray-700 focus:outline-none focus:border-ceub-lilas">
+                        <option value="">Todos os Status</option>
+                        <option value="Perdido">Perdido</option>
+                        <option value="Encontrado">Encontrado</option>
+                    </select>
+                </div>
+
+                <!-- Tabela de Dados -->
+                <div class="bg-white rounded-2xl shadow-sm border border-purple-100 overflow-hidden">
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse">
+                            <thead>
+                                <tr class="bg-ceub-purple text-white text-xs uppercase tracking-wider">
+                                    <th class="p-4">Pet</th>
+                                    <th class="p-4">Espécie / Raça</th>
+                                    <th class="p-4">Local Avistado (CEUB)</th>
+                                    <th class="p-4">Data / Hora</th>
+                                    <th class="p-4">Status</th>
+                                    <th class="p-4 text-center">Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody id="pets-table-body" class="divide-y divide-gray-100 text-sm">
+                                <!-- Preenchido dinamicamente via JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ================= VIEW 3: CADASTRAR PET ================= -->
+            <section id="view-cadastrar" class="view-section hidden max-w-2xl mx-auto space-y-6">
+                <div class="bg-white p-6 md:p-8 rounded-2xl shadow-sm border border-purple-100 space-y-6">
+                    <div class="flex items-center space-x-3 border-b pb-4">
+                        <button onclick="navigateTo('home')" class="p-2 rounded-xl bg-gray-100 text-gray-600 hover:bg-ceub-purple hover:text-white transition-colors" title="Voltar">
+                            <i data-lucide="arrow-left" class="w-5 h-5"></i>
+                        </button>
+                        <div>
+                            <h1 class="text-2xl font-bold text-ceub-purple">Cadastrar Pet Avistado</h1>
+                            <p class="text-xs text-gray-500">Ajude a comunidade CEUB a localizar esse animal</p>
+                        </div>
+                    </div>
+
+                    <form id="pet-form" onsubmit="handleFormSubmit(event)" class="space-y-4">
+                        <div>
+                            <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Nome do Pet (se souber)</label>
+                            <input type="text" id="form-name" required placeholder="Ex: Bob / Desconhecido" class="w-full px-4 py-2.5 border rounded-xl text-sm focus:ring-2 focus:ring-ceub-lilas outline-none">
+                        </div>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Espécie</label>
+                                <select id="form-species" required class="w-full px-4 py-2.5 border rounded-xl text-sm focus:ring-2 focus:ring-ceub-lilas outline-none">
+                                    <option value="Cachorro">Cachorro</option>
+                                    <option value="Gato">Gato</option>
+                                    <option value="Outro">Outro</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Raça / Descrição</label>
+                                <input type="text" id="form-breed" placeholder="Ex: Vira-lata, Caramelo" class="w-full px-4 py-2.5 border rounded-xl text-sm focus:ring-2 focus:ring-ceub-lilas outline-none">
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Local do Avistamento no Campus CEUB</label>
+                            <input type="text" id="form-location" required placeholder="Ex: Próximo ao Bloco 3, Estacionamento Norte" class="w-full px-4 py-2.5 border rounded-xl text-sm focus:ring-2 focus:ring-ceub-lilas outline-none">
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Observações / Detalhes</label>
+                            <textarea id="form-notes" rows="3" placeholder="Informações adicionais como coleira, machucados ou comportamento..." class="w-full px-4 py-2.5 border rounded-xl text-sm focus:ring-2 focus:ring-ceub-lilas outline-none"></textarea>
+                        </div>
+
+                        <div class="pt-2 flex justify-end space-x-3">
+                            <button type="button" onclick="navigateTo('home')" class="px-5 py-2.5 border rounded-xl text-sm font-semibold text-gray-600 hover:bg-gray-50">Cancelar</button>
+                            <button type="submit" class="px-6 py-2.5 bg-ceub-magenta hover:bg-ceub-purple text-white text-sm font-bold rounded-xl shadow-md transition-colors">Salvar Registro</button>
+                        </div>
+                    </form>
+                </div>
+            </section>
+
+            <!-- ================= VIEW 4: MAPA DO CAMPUS ================= -->
+            <section id="view-mapa" class="view-section hidden space-y-6">
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-purple-100 flex items-center space-x-3">
+                    <button onclick="navigateTo('home')" class="p-2 rounded-xl bg-gray-100 text-gray-600 hover:bg-ceub-purple hover:text-white transition-colors">
+                        <i data-lucide="arrow-left" class="w-5 h-5"></i>
+                    </button>
+                    <div>
+                        <h1 class="text-2xl font-bold text-ceub-purple">Mapa de Pontos CEUB</h1>
+                        <p class="text-xs text-gray-500">Mapeamento dos blocos e pontos de apoio animal no campus</p>
+                    </div>
+                </div>
+
+                <div class="bg-white p-8 rounded-2xl shadow-sm border border-purple-100 text-center space-y-4">
+                    <div class="w-16 h-16 bg-purple-100 text-ceub-purple rounded-2xl flex items-center justify-center mx-auto">
+                        <i data-lucide="map" class="w-8 h-8"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-gray-800">Mapa Interativo em Atualização</h3>
+                    <p class="text-sm text-gray-500 max-w-md mx-auto">Em breve os pontos exatos de comedouros e ocorrências de avistamento estarão visíveis sobre o mapa do campus CEUB.</p>
+                    <button onclick="navigateTo('home')" class="px-6 py-2.5 bg-ceub-purple text-white text-sm font-bold rounded-xl hover:bg-ceub-lilas">Voltar para a Inicial</button>
+                </div>
+            </section>
+
+            <!-- ================= VIEW 5: AJUDA & DÚVIDAS ================= -->
+            <section id="view-ajuda" class="view-section hidden space-y-6 max-w-3xl mx-auto">
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-purple-100 flex items-center space-x-3">
+                    <button onclick="navigateTo('home')" class="p-2 rounded-xl bg-gray-100 text-gray-600 hover:bg-ceub-purple hover:text-white transition-colors">
+                        <i data-lucide="arrow-left" class="w-5 h-5"></i>
+                    </button>
+                    <div>
+                        <h1 class="text-2xl font-bold text-ceub-purple">Central de Ajuda</h1>
+                        <p class="text-xs text-gray-500">Como funciona o BuscaPet no CEUB?</p>
+                    </div>
+                </div>
+
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-purple-100 space-y-4">
+                    <div class="p-4 bg-purple-50 rounded-xl">
+                        <h4 class="font-bold text-ceub-purple text-sm">O que fazer se avistar um pet perdido?</h4>
+                        <p class="text-xs text-gray-600 mt-1">Clique em "Cadastrar Pet Perdido" no menu lateral ou inicial, adicione as informações de local no CEUB e detalhes visualizados.</p>
+                    </div>
+                    <div class="p-4 bg-purple-50 rounded-xl">
+                        <h4 class="font-bold text-ceub-purple text-sm">Como retornar à página inicial?</h4>
+                        <p class="text-xs text-gray-600 mt-1">Você pode clicar no <strong>Ícone/Logo CEUB BuscaPet</strong> na parte superior do menu lateral a qualquer momento.</p>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <!-- Application Logic & Routing JavaScript -->
+    <script>
+        // Banco de Dados em Memória (Pets Registrados)
+        let petsData = [
+            {
+                id: 1,
+                name: 'Pipoca',
+                species: 'Cachorro',
+                breed: 'Caramelo / SRD',
+                location: 'Próximo ao Bloco 3 (Biblioteca)',
+                time: 'Hoje, 09:30',
+                status: 'Perdido',
+                img: 'https://images.unsplash.com/photo-1543466835-00a7907e9de1?auto=format&fit=crop&q=80&w=400'
+            },
+            {
+                id: 2,
+                name: 'Fumaça',
+                species: 'Gato',
+                breed: 'Cinza / Siamês',
+                location: 'Estacionamento do Bloco 1',
+                time: 'Hoje, 08:15',
+                status: 'Perdido',
+                img: 'https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?auto=format&fit=crop&q=80&w=400'
+            },
+            {
+                id: 3,
+                name: 'Mel',
+                species: 'Cachorro',
+                breed: 'Poodle Branco',
+                location: 'Praça de Alimentação CEUB',
+                time: 'Ontem, 16:40',
+                status: 'Perdido',
+                img: 'https://images.unsplash.com/photo-1583511655857-d19b40a7a54e?auto=format&fit=crop&q=80&w=400'
+            },
+            {
+                id: 4,
+                name: 'Thor',
+                species: 'Cachorro',
+                breed: 'Golden Retriever',
+                location: 'Entrada Principal - L2',
+                time: 'Ontem, 11:00',
+                status: 'Encontrado',
+                img: 'https://images.unsplash.com/photo-1552053831-71594a27632d?auto=format&fit=crop&q=80&w=400'
+            }
+        ];
+
+        // Roteador de Telas da Aplicação
+        function navigateTo(viewId) {
+            // Oculta todas as views
+            document.querySelectorAll('.view-section').forEach(el => el.classList.add('hidden'));
+
+            // Exibe a view selecionada (Padrão: home)
+            const targetView = document.getElementById(`view-${viewId}`) || document.getElementById('view-home');
+            targetView.classList.remove('hidden');
+
+            // Atualiza classe ACTIVE nos links da barra lateral
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.remove('bg-ceub-magenta', 'text-white', 'shadow-md');
+                item.classList.add('text-gray-200', 'hover:bg-white/10');
+            });
+
+            const activeNav = document.getElementById(`nav-${viewId}`) || document.getElementById('nav-home');
+            if (activeNav) {
+                activeNav.classList.remove('text-gray-200', 'hover:bg-white/10');
+                activeNav.classList.add('bg-ceub-magenta', 'text-white', 'shadow-md');
+            }
+
+            // Atualiza a URL com o Hash
+            window.location.hash = viewId;
+
+            // Re-inicializa ícones da Lucide
+            if (window.lucide) {
+                lucide.createIcons();
+            }
+
+            // Rola para o topo suavemente
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Renderiza Cards na Home
+        function renderHomeCards() {
+            const container = document.getElementById('home-cards-container');
+            if (!container) return;
+
+            const recentPets = petsData.slice(0, 3);
+            container.innerHTML = recentPets.map(pet => `
+                <div class="bg-white rounded-2xl border border-purple-100 shadow-sm overflow-hidden hover:shadow-md transition-all">
+                    <div class="h-44 bg-gray-100 relative overflow-hidden">
+                        <img src="${pet.img}" alt="${pet.name}" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/400x300/43054e/ffffff?text=BuscaPet+CEUB'">
+                        <span class="absolute top-3 right-3 px-3 py-1 rounded-full text-xs font-bold shadow-md ${pet.status === 'Perdido' ? 'bg-ceub-magenta text-white' : 'bg-emerald-500 text-white'}">
+                            ${pet.status}
+                        </span>
+                    </div>
+                    <div class="p-5 space-y-3">
+                        <div class="flex justify-between items-start">
+                            <h3 class="text-lg font-bold text-ceub-purple">${pet.name}</h3>
+                            <span class="text-xs bg-purple-50 text-ceub-lilas px-2 py-1 rounded-md font-semibold">${pet.breed}</span>
+                        </div>
+                        <div class="space-y-1 text-xs text-gray-600">
+                            <p class="flex items-center space-x-1.5">
+                                <i data-lucide="map-pin" class="w-3.5 h-3.5 text-ceub-magenta"></i>
+                                <span>${pet.location}</span>
+                            </p>
+                            <p class="flex items-center space-x-1.5">
+                                <i data-lucide="clock" class="w-3.5 h-3.5 text-gray-400"></i>
+                                <span>${pet.time}</span>
+                            </p>
+                        </div>
+                        <button onclick="navigateTo('pets-perdidos')" class="w-full mt-2 py-2 bg-ceub-lightBg hover:bg-purple-100 text-ceub-purple text-xs font-bold rounded-xl transition-colors flex items-center justify-center space-x-1">
+                            <span>Ver na Tabela</span>
+                            <i data-lucide="chevron-right" class="w-4 h-4"></i>
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Renderiza Tabela de Pets Perdidos
+        function renderPetsTable(data = petsData) {
+            const tbody = document.getElementById('pets-table-body');
+            if (!tbody) return;
+
+            if (data.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="6" class="p-8 text-center text-gray-400">Nenhum registro encontrado.</td>
+                    </tr>
+                `;
+                return;
+            }
+
+            tbody.innerHTML = data.map(pet => `
+                <tr class="hover:bg-purple-50/50 transition-colors">
+                    <td class="p-4 flex items-center space-x-3">
+                        <img src="${pet.img}" alt="${pet.name}" class="w-10 h-10 rounded-xl object-cover border border-purple-200" onerror="this.src='https://placehold.co/100x100/43054e/ffffff?text=Pet'">
+                        <span class="font-bold text-ceub-purple">${pet.name}</span>
+                    </td>
+                    <td class="p-4">
+                        <p class="font-medium text-gray-800">${pet.species}</p>
+                        <p class="text-xs text-gray-400">${pet.breed}</p>
+                    </td>
+                    <td class="p-4 text-gray-700 font-medium">${pet.location}</td>
+                    <td class="p-4 text-xs text-gray-500">${pet.time}</td>
+                    <td class="p-4">
+                        <span class="inline-block px-2.5 py-1 rounded-full text-xs font-bold ${pet.status === 'Perdido' ? 'bg-pink-100 text-ceub-magenta' : 'bg-emerald-100 text-emerald-700'}">
+                            ${pet.status}
+                        </span>
+                    </td>
+                    <td class="p-4 text-center">
+                        <button onclick="togglePetStatus(${pet.id})" class="px-3 py-1 bg-ceub-purple text-white text-xs rounded-lg hover:bg-ceub-lilas transition-colors">
+                            Alterar Status
+                        </button>
+                    </td>
+                </tr>
+            `).join('');
+
+            // Atualiza badge de contagem
+            const badge = document.getElementById('total-badge');
+            const perdidosCount = petsData.filter(p => p.status === 'Perdido').length;
+            if (badge) badge.textContent = petsData.length;
+            const statPerdidos = document.getElementById('stat-perdidos');
+            if (statPerdidos) statPerdidos.textContent = perdidosCount;
+        }
+
+        // Filtro de Busca
+        function filterPets() {
+            const query = document.getElementById('search-input').value.toLowerCase();
+            const species = document.getElementById('species-filter').value;
+            const status = document.getElementById('status-filter').value;
+
+            const filtered = petsData.filter(pet => {
+                const matchesQuery = pet.name.toLowerCase().includes(query) || 
+                                     pet.location.toLowerCase().includes(query) ||
+                                     pet.breed.toLowerCase().includes(query);
+                const matchesSpecies = species === '' || pet.species === species;
+                const matchesStatus = status === '' || pet.status === status;
+
+                return matchesQuery && matchesSpecies && matchesStatus;
+            });
+
+            renderPetsTable(filtered);
+        }
+
+        // Alterar Status (Simulação)
+        function togglePetStatus(id) {
+            const pet = petsData.find(p => p.id === id);
+            if (pet) {
+                pet.status = pet.status === 'Perdido' ? 'Encontrado' : 'Perdido';
+                renderPetsTable();
+                renderHomeCards();
+            }
+        }
+
+        // Formulário de Cadastro
+        function handleFormSubmit(e) {
+            e.preventDefault();
+            const name = document.getElementById('form-name').value;
+            const species = document.getElementById('form-species').value;
+            const breed = document.getElementById('form-breed').value || 'Não informada';
+            const location = document.getElementById('form-location').value;
+
+            const newPet = {
+                id: petsData.length + 1,
+                name: name,
+                species: species,
+                breed: breed,
+                location: location,
+                time: 'Agora mesmo',
+                status: 'Perdido',
+                img: species === 'Gato' 
+                    ? 'https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?auto=format&fit=crop&q=80&w=400' 
+                    : 'https://images.unsplash.com/photo-1583511655857-d19b40a7a54e?auto=format&fit=crop&q=80&w=400'
+            };
+
+            petsData.unshift(newPet);
+            document.getElementById('pet-form').reset();
+            
+            renderHomeCards();
+            renderPetsTable();
+            navigateTo('pets-perdidos');
+        }
+
+        // Alternar Menu Mobile
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobile-menu');
+            if (menu) menu.classList.toggle('hidden');
+        }
+
+        // Inicialização do Aplicativo
+        window.addEventListener('DOMContentLoaded', () => {
+            renderHomeCards();
+            renderPetsTable();
+
+            // Detecta hash da URL se houver
+            const hash = window.location.hash.replace('#', '');
+            if (hash) {
+                navigateTo(hash);
+            } else {
+                navigateTo('home');
+            }
+
+            if (window.lucide) {
+                lucide.createIcons();
+            }
+        });
+    </script>
+</body>
+</html>
